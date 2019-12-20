@@ -1,0 +1,3 @@
+- src: https://gitlab.com/MrMikeandike/ansible-install-docker
+  scm: git
+  name: ansible-install-docker

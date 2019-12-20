@@ -1,0 +1,33 @@
+{
+  "_comment": "Variables are defined in variables.json.",
+  "_comment": "Current variables are",
+  "_comment": "---- output_dir  -----",
+  "_comment": "----- box_name  ------",
+  "_comment": "-----------------------------",
+  "_comment": "NOTE: please copy variables-example.json to variables.json",
+
+  "builders": [
+    {
+      "type": "vagrant",
+      "communicator": "ssh",
+      "source_path": "debian/stretch64",
+      "provider": "virtualbox",
+      "add_force": true,
+      "box_name": "{{user `box_name`}}"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "{{ template_dir }}/scripts/ansible.sh"
+    },
+    { 
+      "type": "ansible-local",
+      "playbook_dir": "{{ template_dir }}/ansible/",
+      "playbook_file": "{{ template_dir }}/ansible/debian9-box.yml",
+      "galaxy_file": "{{ template_dir }}/ansible/requirements.yml"
+
+    }
+  ]
+}

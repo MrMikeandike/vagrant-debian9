@@ -1,0 +1,6 @@
+- hosts: all
+#  vars:
+  tasks:
+    - name: start docker install role
+      include_role:
+        name: ansible-install-docker
