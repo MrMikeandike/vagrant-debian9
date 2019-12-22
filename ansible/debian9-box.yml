@@ -1,6 +1,72 @@
 - hosts: all
-#  vars:
+  gather_facts: yes
+  vars_files:
+    - ./vars.yml
+  vars:
+     vagrant_user: vagrant
   tasks:
+    - name: prereq packages for apt_repository ansible module
+      apt:
+        pkg:
+          - python-apt
+          - python3-apt
+        state: latest
+      become: yes
+
+    - name: add stretch-backports main and contrib repos
+      apt_repository:
+        repo: deb http://ftp.debian.org/debian stretch-backports main contrib
+        state: present
+        update_cache: no
+      become: yes
+
+    - name: install vbox guest dkms (guest additions) apt package
+      apt:
+        update_cache: yes
+        pkg:
+          - virtualbox-guest-dkms
+        state: latest
+      become: yes
+    
     - name: start docker install role
       include_role:
         name: ansible-install-docker
+      vars:
+        main_docker_user: "{{ vagrant_user }}"
+    
+    - name: install common packages
+      apt:
+        update_cache: no
+        pkg:
+          - neovim
+          - curl
+        state: latest
+      become: yes
+    
+    - name: include zsh role
+      include_role:
+        name: gantsign.antigen
+      vars:
+        users:
+          - username: "{{ vagrant_user }}"
+            antigen_libraries:
+              - name: oh-my-zsh
+            antigen_theme:
+              name: robbyrussell
+            antigen_bundles:
+              # Bundles from the default repo (robbyrussell's oh-my-zsh).
+              - name: git
+              - name: pip
+              - name: command-not-found
+              - name: python
+              - name: kubectl
+              - name: helm
+              - name: docker
+              # Syntax highlighting bundle.
+              - name: zsh-syntax-highlighting # `name` is required (any valid file name will do so long as it's unique for the bundles)
+                url: zsh-users/zsh-syntax-highlighting
+
+    - name: include golang install role
+      include_role:
+        name: gantsign.antigen
+      when: false

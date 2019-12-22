@@ -1,3 +1,6 @@
 - src: https://gitlab.com/MrMikeandike/ansible-install-docker
   scm: git
   name: ansible-install-docker
+
+- src: gantsign.antigen
+- src: gantsign.golang

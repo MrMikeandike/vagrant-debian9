@@ -13,6 +13,7 @@
       "source_path": "debian/stretch64",
       "provider": "virtualbox",
       "add_force": true,
+      "skip_add": true,
       "box_name": "{{user `box_name`}}"
     }
   ],
@@ -29,5 +30,17 @@
       "galaxy_file": "{{ template_dir }}/ansible/requirements.yml"
 
     }
-  ]
+  ],
+  "post-processors": 
+    [
+     {
+       "type": "shell-local",
+       "inline": 
+         [
+           "copy 'output-vagrant/{{user `box_name`}}.box' '{{user `output_dir`}}/{{user `box_name`}}.box'",
+           "vagrant box add --name {{user `box_name`}} '{{user `output_dir`}}/{{user `box_name`}}.box'"
+       	
+         ]
+      }
+    ]
 }
