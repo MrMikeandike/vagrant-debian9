@@ -10,7 +10,7 @@
 #----
 # - update ca certificates to try and avoid ssl issues with galaxy
 sudo apt update -y \
-&& sudo apt install --upgrade -y git dirmngr software-properties-common python python-pip python3 python3-pip ca-certificates \
+&& sudo apt install --upgrade -y git dirmngr software-properties-common python python-pip python3 python3-pip ca-certificates python-apt python3-apt \
 && sudo update-ca-certificates
 # ---------------------------
 # install ansible

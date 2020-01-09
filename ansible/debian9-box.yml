@@ -5,14 +5,6 @@
   vars:
      vagrant_user: vagrant
   tasks:
-    - name: prereq packages for apt_repository ansible module
-      apt:
-        pkg:
-          - python-apt
-          - python3-apt
-        state: latest
-      become: yes
-
     - name: add stretch-backports main and contrib repos
       apt_repository:
         repo: deb http://ftp.debian.org/debian stretch-backports main contrib
@@ -24,6 +16,8 @@
       apt:
         update_cache: yes
         pkg:
+          - build-essential
+          - perl
           - virtualbox-guest-dkms
         state: latest
       become: yes
@@ -40,6 +34,7 @@
         pkg:
           - neovim
           - curl
+          - make
         state: latest
       become: yes
     
@@ -68,5 +63,27 @@
 
     - name: include golang install role
       include_role:
-        name: gantsign.antigen
-      when: false
+        name: gantsign.golang
+
+    - name: Add golang bin dir to system-wide $PATH.
+      copy:
+        dest: /etc/profile.d/golang.sh
+        content: 'PATH=$PATH:{{ ansible_local.golang.general.home }}/bin'
+      become: yes
+
+    - name: install init.vim for neovim
+      copy:
+        src: files/init.vim
+        dest: "{{ ansible_env.HOME }}/.config/nvim/"
+
+    # TODO - Set for root as well?
+    - name: set zshrc environment variables
+      blockinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        block: "{{item.block_text}}"
+        marker: "{{item.mark_text}}"
+        state: present
+      loop:
+        - mark_text: "<!-- {mark} ANSIBLE MANAGED BLOCK - golang -->"
+          block_text: |
+            PATH=$PATH:{{ ansible_local.golang.general.home }}/bin

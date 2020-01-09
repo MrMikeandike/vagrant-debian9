@@ -10,7 +10,7 @@
     {
       "type": "vagrant",
       "communicator": "ssh",
-      "source_path": "debian/stretch64",
+      "source_path": "bento/debian-9",
       "provider": "virtualbox",
       "add_force": true,
       "skip_add": true,
@@ -37,8 +37,8 @@
        "type": "shell-local",
        "inline": 
          [
-           "copy 'output-vagrant/{{user `box_name`}}.box' '{{user `output_dir`}}/{{user `box_name`}}.box'",
-           "vagrant box add --name {{user `box_name`}} '{{user `output_dir`}}/{{user `box_name`}}.box'"
+           "c:\\cmder\\vendor\\git-for-windows\\bin\\bash.exe -c \"cp -f '{{ template_dir }}\\output-vagrant\\package.box' '{{user `output_dir`}}/{{user `box_name`}}.box'\"",
+           "c:\\cmder\\vendor\\git-for-windows\\bin\\bash.exe -c \"vagrant box add --force --name {{user `box_name`}} '{{user `output_dir`}}/{{user `box_name`}}.box'\""
        	
          ]
       }
