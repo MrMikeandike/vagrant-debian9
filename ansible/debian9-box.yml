@@ -84,6 +84,6 @@
         marker: "{{item.mark_text}}"
         state: present
       loop:
-        - mark_text: "<!-- {mark} ANSIBLE MANAGED BLOCK - golang -->"
+        - mark_text: "#-- {mark} ANSIBLE MANAGED BLOCK - golang --#"
           block_text: |
             PATH=$PATH:{{ ansible_local.golang.general.home }}/bin
